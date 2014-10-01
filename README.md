@@ -43,10 +43,3 @@ npm run-script test-specificTestName
 ```
 
 Where `specificTestName` is one of `logging`, `collectionAccess`, `email`, `push`
-
-
-For more verbose test output, use the environment variable `LOG_LEVEL` set to `info` or `debug`:
-
-```
-LOG_LEVEL=debug npm test
-```
