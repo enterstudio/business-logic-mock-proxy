@@ -11,6 +11,6 @@
 # Unauthorized reproduction, transmission or distribution of this file and its
 # contents is a violation of applicable laws.
 
-Tingo = require('tingodb')({ memStore: true, nativeObjectID: true, searchInArray: true })
+Tingo = require('tingodb')({ memStore: true, nativeObjectID: false, searchInArray: true })
 
 module.exports = new Tingo.Db 'testDatabase', {}
