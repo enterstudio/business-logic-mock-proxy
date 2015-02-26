@@ -298,6 +298,7 @@ describe 'collectionAccess / findAndModify', () ->
           query:
             $where:
               propOne: 2
+          entity: {}
         (err, res, body) ->
           res.statusCode.should.eql 400
           body.code.should.eql 'DisallowedQuerySyntax'
@@ -310,6 +311,7 @@ describe 'collectionAccess / findAndModify', () ->
           query:
             $query:
               propOne: 2
+          entity: {}
         (err, res, body) ->
           res.statusCode.should.eql 400
           body.code.should.eql 'DisallowedQuerySyntax'

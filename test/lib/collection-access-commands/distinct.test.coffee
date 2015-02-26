@@ -60,18 +60,14 @@ describe 'collectionAccess / distinct', () ->
         body.code.should.eql 'MissingRequiredParameter'
         done()
 
-  it 'correctly performs a distinct when query is not specified', (done) ->
+  it 'fails when query is not specified', (done) ->
     req.post
       url: "#{baseUrl}/collectionAccess/#{collectionName}/distinct"
       json:
         keyName: 'propTwo'
       (err, res, body) ->
-        res.statusCode.should.eql 200
-        Array.isArray(body).should.be.true
-        body.length.should.eql 3
-        body[0].should.eql 2
-        body[1].should.eql 1
-        body[2].should.eql 3
+        res.statusCode.should.eql 400
+        body.code.should.eql 'MissingRequiredParameter'
         done()
 
   it 'correctly performs a distinct when query is specified', (done) ->
@@ -98,7 +94,7 @@ describe 'collectionAccess / distinct', () ->
           unique: 0
       (err, res, body) ->
         return done err if err
-        objectId = body._id.toString();
+        objectId = body._id.toString()
         req.post
           url: "#{baseUrl}/collectionAccess/#{collectionName}/distinct"
           json:
@@ -121,8 +117,8 @@ describe 'collectionAccess / distinct', () ->
           $or: [{ unique: 0 }, { unique: 1 }]
       (err, res, body) ->
         return done err if err
-        object1Id = body[0]._id.toString();
-        object2Id = body[1]._id.toString();
+        object1Id = body[0]._id.toString()
+        object2Id = body[1]._id.toString()
         req.post
           url: "#{baseUrl}/collectionAccess/#{collectionName}/distinct"
           json:

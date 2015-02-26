@@ -11,6 +11,7 @@
 # Unauthorized reproduction, transmission or distribution of this file and its
 # contents is a violation of applicable laws.
 _ = require 'underscore'
+async = require 'async'
 errors = require '../errors'
 dataStore = require '../data-store'
 
@@ -68,7 +69,7 @@ find = (req, res, next) ->
     if req.body.options.skip?
       options.skip = req.body.options.skip
 
-  req.collectionCursor.find(req.body.query ? {}, options ? {}).toArray (err, entities) ->
+  req.collectionCursor.find(req.body.query, options ? {}).toArray (err, entities) ->
     if err then return next errors.createKinveyError 'MongoError', err.toString()
     res.status(200).json entities
     next()
@@ -151,7 +152,7 @@ distinct = (req, res, next) ->
   if not req.body.keyName?
     return next errors.createKinveyError 'MissingRequiredParameter', 'The request must contain a keyName'
 
-  req.collectionCursor.find(req.body.query ? {}).toArray (err, queryResults) ->
+  req.collectionCursor.find(req.body.query).toArray (err, queryResults) ->
     if err then return next errors.createKinveyError 'MongoError', err.toString()
     values = _.pluck queryResults, req.body.keyName
     res.status(200).json _.uniq values
@@ -236,26 +237,72 @@ collectionExists = (req, res, next) ->
       exists: exists
     next()
 
+listCollections = (req, res, next) ->
+  dataStore.collectionNames (err, collectionNames) ->
+    if err then return next errors.createKinveyError 'MongoError', err.toString()
+
+    collectionNames = _.map _.pluck(collectionNames, 'name'), (name) ->
+      name.substring(name.indexOf('.') + 1)
+
+    collectionStats = []
+
+    collectionIterator = (collectionName, doneWithCollection) ->
+      dataStore.collection(collectionName).count {}, (err, numberOfEntities) ->
+        if err then return doneWithCollection errors.createKinveyError 'MongoError', err.toString()
+
+        collectionStats.push { name: collectionName, count: numberOfEntities }
+        doneWithCollection()
+
+    async.each collectionNames, collectionIterator, (err) ->
+      if err then return next errors.createKinveyError 'MongoError', err.toString()
+      res.status(200).json collectionStats
+      next()
+
+createCollection = (req, res, next) ->
+  dataStore.createCollection req.params.collectionName, (err) ->
+    if err then return next errors.createKinveyError 'MongoError', err.toString()
+
+    res.status(201).json {}
+    next()
+
+requireEntity = (req, res, next) ->
+  unless req.body?.entity?
+    return next errors.createKinveyError 'MissingRequiredParameter', 'The request must contain an entity'
+  next()
+
+requireQuery = (req, res, next) ->
+  unless req.body?.query?
+    return next errors.createKinveyError 'MissingRequiredParameter', 'The request must contain a query'
+  next()
+
 loadCollection = (req, res, next) ->
   dataStore.collection req.params.collectionName, (err, collection) ->
     if err then return next errors.createKinveyError 'MongoError', err.toString()
     req.collectionCursor = collection
     next()
 
+module.exports.setupKinveyCollections = (callback) ->
+  dataStore.collection('user').ensureIndex { username: 1 }, { unique: true }, (err) ->
+    if err then return callback err
+    callback()
+
 module.exports.installRoutes = (app) ->
   config = app.get 'config'
 
-  app.post "/collectionAccess/:collectionName/collectionExists",                                      collectionExists
-  app.post "/collectionAccess/:collectionName/count",            restrictQueryString, loadCollection, count
-  app.post "/collectionAccess/:collectionName/distinct",         restrictQueryString, loadCollection, distinct
-  app.post "/collectionAccess/:collectionName/find",             restrictQueryString, loadCollection, find
-  app.post "/collectionAccess/:collectionName/findAndModify",    restrictQueryString, loadCollection, findAndModify
-  app.post "/collectionAccess/:collectionName/findAndRemove",    restrictQueryString, loadCollection, findAndRemove
-  app.post "/collectionAccess/:collectionName/findOne",          restrictQueryString, loadCollection, findOne
-  app.post "/collectionAccess/:collectionName/geoNear",          restrictQueryString, loadCollection, geoNear
-  app.post "/collectionAccess/:collectionName/group",            restrictQueryString, loadCollection, group
-  app.post "/collectionAccess/:collectionName/insert",                                loadCollection, insert
-  app.post "/collectionAccess/:collectionName/mapReduce",        restrictQueryString,                 mapReduce
-  app.post "/collectionAccess/:collectionName/remove",           restrictQueryString, loadCollection, remove
-  app.post "/collectionAccess/:collectionName/save",                                  loadCollection, save
-  app.post "/collectionAccess/:collectionName/update",           restrictQueryString, loadCollection, update
+  app.post "/collectionAccess/:collectionName/collectionExists",                                                                   collectionExists
+  app.post "/collectionAccess/:collectionName/count",                           requireQuery, restrictQueryString, loadCollection, count
+  app.post "/collectionAccess/:collectionName/distinct",                        requireQuery, restrictQueryString, loadCollection, distinct
+  app.post "/collectionAccess/:collectionName/find",                            requireQuery, restrictQueryString, loadCollection, find
+  app.post "/collectionAccess/:collectionName/findAndModify",    requireEntity, requireQuery, restrictQueryString, loadCollection, findAndModify
+  app.post "/collectionAccess/:collectionName/findAndRemove",                   requireQuery, restrictQueryString, loadCollection, findAndRemove
+  app.post "/collectionAccess/:collectionName/findOne",                         requireQuery, restrictQueryString, loadCollection, findOne
+  app.post "/collectionAccess/:collectionName/geoNear",                                       restrictQueryString, loadCollection, geoNear
+  app.post "/collectionAccess/:collectionName/group",                                         restrictQueryString, loadCollection, group
+  app.post "/collectionAccess/:collectionName/insert",           requireEntity,                                    loadCollection, insert
+  app.post "/collectionAccess/:collectionName/mapReduce",                                     restrictQueryString,                 mapReduce
+  app.post "/collectionAccess/:collectionName/remove",                          requireQuery, restrictQueryString, loadCollection, remove
+  app.post "/collectionAccess/:collectionName/save",             requireEntity,                                    loadCollection, save
+  app.post "/collectionAccess/:collectionName/update",           requireEntity, requireQuery, restrictQueryString, loadCollection, update
+  app.post "/collectionAccess/:collectionName/createCollection",                                                                   createCollection
+
+  app.get  "/collectionAccess/collectionStats",                                                                                    listCollections

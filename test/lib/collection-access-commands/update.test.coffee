@@ -224,6 +224,7 @@ describe 'collectionAccess / update', () ->
           query:
             $where:
               propOne: 2
+          entity: {}
         (err, res, body) ->
           res.statusCode.should.eql 400
           body.code.should.eql 'DisallowedQuerySyntax'
@@ -236,6 +237,7 @@ describe 'collectionAccess / update', () ->
           query:
             $query:
               propOne: 2
+          entity: {}
         (err, res, body) ->
           res.statusCode.should.eql 400
           body.code.should.eql 'DisallowedQuerySyntax'

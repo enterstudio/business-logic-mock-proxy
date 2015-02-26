@@ -31,6 +31,14 @@ describe 'Push service', () ->
     testUtils.stopServer ->
       done()
 
+  afterEach (done) ->
+    request.post
+      url: "#{baseUrl}/collectionAccess/#{config.outputCollections.push}/remove"
+      json:
+        query: {}
+      (err, res, body) ->
+        done err
+
   describe 'sending a message', () ->
     it 'requires the messageContent parameter', (done) ->
       req.post
@@ -147,3 +155,75 @@ describe 'Push service', () ->
           body.type.should.eql 'broadcast'
           body.content.should.eql bodyToSend.messageContent
           done()
+
+  it 'can fetch push messages', (done) ->
+    bodyToSend =
+      messageContent: uuid()
+
+    req.post
+      url: "#{baseUrl}/push/sendBroadcast"
+      json: bodyToSend
+      (err, res, body) ->
+        return done err if err
+        req.get
+          url: "#{baseUrl}/push"
+          (err, res, body) ->
+            return done err if err
+            res.statusCode.should.eql 200
+            body = JSON.parse body
+            body.length.should.eql 1
+            body[0].should.have.properties ['_id', 'timestamp', 'type', 'content']
+            body[0].type.should.eql 'broadcast'
+            body[0].content.should.eql bodyToSend.messageContent
+            done()
+
+  it 'can get push message count', (done) ->
+    bodyToSend =
+      messageContent: uuid()
+
+    req.post
+      url: "#{baseUrl}/push/sendBroadcast"
+      json: bodyToSend
+      (err, res, body) ->
+        return done err if err
+        req.post
+          url: "#{baseUrl}/push/sendBroadcast"
+          json: bodyToSend
+          (err, res, body) ->
+            return done err if err
+            req.get
+              url: "#{baseUrl}/push/count"
+              (err, res, body) ->
+                return done err if err
+                body = JSON.parse body
+                body.count.should.eql 2
+                done()
+
+  it 'can delete push messages', (done) ->
+    bodyToSend =
+      messageContent: uuid()
+
+    req.post
+      url: "#{baseUrl}/push/sendBroadcast"
+      json: bodyToSend
+      (err, res, body) ->
+        return done err if err
+        req.get
+          url: "#{baseUrl}/push/count"
+          (err, res, body) ->
+            return done err if err
+            body = JSON.parse body
+            body.count.should.eql 1
+            req.del
+              url: "#{baseUrl}/push"
+              (err, res, body) ->
+                return done err if err
+                body = JSON.parse body
+                body.removed.should.eql 1
+                req.get
+                  url: "#{baseUrl}/push/count"
+                  (err, res, body) ->
+                    return done err if err
+                    body = JSON.parse body
+                    body.count.should.eql 0
+                    done()

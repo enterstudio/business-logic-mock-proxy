@@ -104,7 +104,7 @@ describe 'collectionAccess / remove', () ->
         req.post
           url: "#{baseUrl}/collectionAccess/#{collectionName}/count"
           json:
-            query: 
+            query:
               $and: [{ propOne: 2 }, { propTwo: 3 }]
           (err, res, body) ->
             return done err if err

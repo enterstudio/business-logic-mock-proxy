@@ -65,7 +65,7 @@ describe 'Logging service', () ->
 
   it "can specify logging levels", (done) ->
     logLevels = ['info', 'warning', 'error', 'fatal']
-    
+
     createLogWithLevel = (logLevel, callback) ->
       req.post
         url: "#{baseUrl}/log"
@@ -90,3 +90,74 @@ describe 'Logging service', () ->
             logEntry.level.should.eql logLevels[i].toUpperCase()
 
           done()
+
+  it 'can fetch logs', (done) ->
+    bodyToSend =
+      message: uuid()
+
+    req.post
+      url: "#{baseUrl}/log"
+      json: bodyToSend
+      (err, res, body) ->
+        return done err if err
+        req.get
+          url: "#{baseUrl}/log"
+          (err, res, body) ->
+            return done err if err
+            body = JSON.parse body
+            body.length.should.eql 1
+            body[0].should.have.properties 'timestampInMS', 'timestamp', 'level', 'message'
+            body[0].level.should.eql 'INFO'
+            body[0].message.should.eql bodyToSend.message
+            done()
+
+  it 'can get log count', (done) ->
+    bodyToSend =
+      message: uuid()
+
+    req.post
+      url: "#{baseUrl}/log"
+      json: bodyToSend
+      (err, res, body) ->
+        return done err if err
+        req.post
+          url: "#{baseUrl}/log"
+          json: bodyToSend
+          (err, res, body) ->
+            return done err if err
+            req.get
+              url: "#{baseUrl}/log/count"
+              (err, res, body) ->
+                return done err if err
+                body = JSON.parse body
+                body.count.should.eql 2
+                done()
+
+  it 'can delete logs', (done) ->
+    bodyToSend =
+      message: uuid()
+
+    req.post
+      url: "#{baseUrl}/log"
+      json: bodyToSend
+      (err, res, body) ->
+        return done err if err
+        req.get
+          url: "#{baseUrl}/log/count"
+          (err, res, body) ->
+            return done err if err
+            body = JSON.parse body
+            body.count.should.eql 1
+            req.del
+              url: "#{baseUrl}/log"
+              (err, res, body) ->
+                return done err if err
+                body = JSON.parse body
+                body.removed.should.eql 1
+                req.get
+                  url: "#{baseUrl}/log/count"
+                  (err, res, body) ->
+                    return done err if err
+                    body = JSON.parse body
+                    body.count.should.eql 0
+                    done()

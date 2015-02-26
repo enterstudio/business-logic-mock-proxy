@@ -32,6 +32,14 @@ describe 'Email service', () ->
     testUtils.stopServer ->
       done()
 
+  afterEach (done) ->
+    request.post
+      url: "#{baseUrl}/collectionAccess/#{config.outputCollections.email}/remove"
+      json:
+        query: {}
+      (err, res, body) ->
+        done err
+
   it "requires 'to', 'from', 'subject' and 'body' parameters", (done) ->
     requiredArguments = ['to', 'from', 'subject', 'body']
 
@@ -154,3 +162,85 @@ describe 'Email service', () ->
         body.mailServerResponse.should.have.properties ['_id', 'timestamp', 'message']
         body.mailServerResponse.message.should.eql bodyToSend
         done()
+
+  it 'can fetch email messages', (done) ->
+    bodyToSend =
+      to: uuid()
+      from: uuid()
+      subject: uuid()
+      body: uuid()
+
+    req.post
+      url: "#{baseUrl}/email/send"
+      json: bodyToSend
+      (err, res, body) ->
+        return done err if err
+        req.get
+          url: "#{baseUrl}/email"
+          (err, res, body) ->
+            return done err if err
+            body = JSON.parse body
+            body.length.should.eql 1
+            body[0].should.have.properties ['_id', 'timestamp', 'message']
+            body[0].message.to.should.eql bodyToSend.to
+            body[0].message.from.should.eql bodyToSend.from
+            body[0].message.subject.should.eql bodyToSend.subject
+            body[0].message.body.should.eql bodyToSend.body
+            done()
+
+  it 'can get email message count', (done) ->
+    bodyToSend =
+      to: uuid()
+      from: uuid()
+      subject: uuid()
+      body: uuid()
+
+    req.post
+      url: "#{baseUrl}/email/send"
+      json: bodyToSend
+      (err, res, body) ->
+        return done err if err
+        req.post
+          url: "#{baseUrl}/email/send"
+          json: bodyToSend
+          (err, res, body) ->
+            return done err if err
+            req.get
+              url: "#{baseUrl}/email/count"
+              (err, res, body) ->
+                return done err if err
+                body = JSON.parse body
+                body.count.should.eql 2
+                done()
+
+  it 'can delete email messages', (done) ->
+    bodyToSend =
+      to: uuid()
+      from: uuid()
+      subject: uuid()
+      body: uuid()
+
+    req.post
+      url: "#{baseUrl}/email/send"
+      json: bodyToSend
+      (err, res, body) ->
+        return done err if err
+        req.get
+          url: "#{baseUrl}/email/count"
+          (err, res, body) ->
+            return done err if err
+            body = JSON.parse body
+            body.count.should.eql 1
+            req.del
+              url: "#{baseUrl}/email"
+              (err, res, body) ->
+                return done err if err
+                body = JSON.parse body
+                body.removed.should.eql 1
+                req.get
+                  url: "#{baseUrl}/email/count"
+                  (err, res, body) ->
+                    return done err if err
+                    body = JSON.parse body
+                    body.count.should.eql 0
+                    done()

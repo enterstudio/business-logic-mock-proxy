@@ -68,7 +68,7 @@ describe 'collectionAccess / insert', () ->
           req.post
             url: "#{baseUrl}/collectionAccess/fakeCollectionName/find"
             json:
-              entity: {}
+              query: {}
             (err, res, body) ->
               return done err if err
               Array.isArray(body).should.be.true

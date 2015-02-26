@@ -13,6 +13,7 @@
 
 http = require 'http'
 express = require 'express'
+cors = require 'cors'
 BSON = require('bson').BSONPure.BSON
 errors = require './errors'
 
@@ -23,6 +24,8 @@ module.exports.runApp = (callback) ->
   exports.config = config = require 'config'
 
   app = express()
+
+  app.use cors()
 
   app.set 'config', config
 
@@ -41,12 +44,22 @@ module.exports.runApp = (callback) ->
 
   require('./routes/configuration').installRoutes app
 
-  require('./routes/collection-access').installRoutes app
+  collectionAccess = require './routes/collection-access'
+  collectionAccess.installRoutes app
   require('./routes/email').installRoutes app
   require('./routes/push').installRoutes app
   require('./routes/logging').installRoutes app
 
+  require('./routes/interface').installRoutes app
+
+  app.get '/status', (req, res, next) ->
+    res.status(204).send()
+    next()
+
   app.use errors.onError
+
+  collectionAccess.setupKinveyCollections (err) ->
+    if err then console.log 'Error occurred while setting up default Kinvey collections. Error:', err
 
   process.on 'uncaughtException', (err) ->
     console.log "#{new Date().toISOString()} --", err.stack

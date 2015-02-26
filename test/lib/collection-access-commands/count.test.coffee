@@ -119,11 +119,11 @@ describe 'collectionAccess / count', () ->
       (err, res, body) ->
         return done err if err
         body.length.should.eql 2
-        object1Id = body[0]._id.toString();
-        object2Id = body[1]._id.toString();
+        object1Id = body[0]._id.toString()
+        object2Id = body[1]._id.toString()
         req.post
           url: "#{baseUrl}/collectionAccess/#{collectionName}/count"
-          body: BSON.serialize({ query: { _id: $in: [ object1Id, object2Id ] } })
+          body: BSON.serialize({ query: { _id: { $in: [ object1Id, object2Id ] } } })
           headers:
             'content-type': 'application/bson'
           (err, res, body) ->

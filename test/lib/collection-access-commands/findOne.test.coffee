@@ -160,7 +160,7 @@ describe 'collectionAccess / findOne', () ->
           query:
             unique: 0
           options:
-            fields: 
+            fields:
               propTwo: 1
         (err, res, body) ->
           return done err if err

@@ -11,16 +11,13 @@
 # Unauthorized reproduction, transmission or distribution of this file and its
 # contents is a violation of applicable laws.
 
-pkg = require '../package.json'
+express = require 'express'
+dataStore = require '../data-store'
+errors = require '../errors'
 
-module.exports =
-  outputCollections:
-    email: '_outgoingEmailMessages'
-    push: '_outgoingPushMessages'
-    logging: '_blLogs'
+config = null
 
-  server:
-    port: 2845
-    address: "localhost"
+module.exports.installRoutes = (app) ->
+  config = app.get 'config'
 
-  version: pkg.version
+  app.use '/interface', express.static 'node_modules/business-logic-local-dashboard/dist'

@@ -12,14 +12,11 @@
 # contents is a violation of applicable laws.
 
 async = require 'async'
+Busboy = require 'busboy'
+JSONStream = require 'JSONStream'
+JSZip = require 'jszip'
 dataStore = require '../data-store'
 errors = require '../errors'
-
-getConfiguration = (req, res, next) ->
-  next()
-
-setConfiguration = (req, res, next) ->
-  next()
 
 dropAllData = (req, res, next) ->
   dataStore.dropDatabase (err) ->
@@ -28,52 +25,132 @@ dropAllData = (req, res, next) ->
     next()
 
 importCollectionData = (req, res, next) ->
-  # case 1: import to a named collection
-  if req.params.collectionName?
-    unless Array.isArray req.body
-      return next errors.createKinveyError 'DataImportError', 'When importing data into a named colletion, the request body must contain an array of entities'
+  importStats = {}
+  pending = 0
 
-    dataStore.dropCollection req.params.collectionName, (err, result) ->
+  try
+    busboy = new Busboy { headers: req.headers }
+  catch e
+    msg = e.message?.toLowerCase?() ? e.toString?() ? ''
+    if msg.indexOf('unsupported content type') >= 0
+      return next errors.createKinveyError 'DataImportError', 'Only JSON files can be imported'
+    return next errors.createKinveyError 'DataImportError', msg
+
+  # only drop a collection once per import request.
+  # this avoids accidentally inserting data into a collection and then dropping it
+  droppedCollections = {}
+  dropCollectionOnlyOnce = (collectionName, callback) ->
+    if droppedCollections.hasOwnProperty collectionName
+      return callback()
+    droppedCollections[collectionName] = true
+    dataStore.dropCollection collectionName, callback
+
+  busboy.on 'file', (field, file, filename, encoding, mimetype) ->
+    pending += 1
+
+    if req.query?.collectionName?
+      collectionName = req.query.collectionName
+    else
+      jsonIndex = filename.indexOf '.json'
+      if jsonIndex >= 0
+        collectionName = filename.substring 0, jsonIndex
+      else
+        collectionName = filename
+
+    dropCollectionOnlyOnce collectionName, (err, result) ->
       # an error will be returned if the collection doesn't exist. ignore it.
-      dataStore.createCollection req.params.collectionName, (err, collection) ->
+      dataStore.createCollection collectionName, (err, collection) ->
         if err then return next errors.createKinveyError 'DataImportError', err.toString()
-        collection.insert req.body, (err, createdEntities) ->
-          if err then return next errors.createKinveyError 'DataImportError', err.toString()
-          res.status(201).json
-            collectionName: req.params.collectionName
-            numberImported: createdEntities.length
-          next()
-  # case 2: import to an object containing named collections and their data
+        stream = file.pipe JSONStream.parse '*'
+
+        stream.on 'data', (data) ->
+          pending += 1
+
+          collection.insert data, { w: 1 }, (err, insertedEntities) ->
+            if err?
+              console.log err
+              msg = err.stack ? err.message ? err.description ? err.error?.debug
+              if typeof msg is 'object'
+                try
+                  msg = JSON.stringify msg
+
+              importStats[collectionName] ?= {}
+              importStats[collectionName].importErrors ?= []
+              importStats[collectionName].importErrors.push msg
+            else
+              importStats[collectionName] ?= {}
+              importStats[collectionName].numberImported ?= 0
+              importStats[collectionName].numberImported += 1
+
+            pending -= 1
+
+        stream.on 'end', ->
+          pending -= 1
+
+        # Fail if the file size limit has been reached.
+        stream.on 'limit', ->
+          next? errors.createKinveyError 'DataImportError', 'File size limit exceeded'
+          next = null # Reset.
+
+        # Terminate on error.
+        stream.on 'error', (err) ->
+          # Continue (once).
+          next? errors.createKinveyError 'DataImportError', 'There might be a syntax error in the file you are trying to import'
+          next = null # Reset.
+
+  sendResponseWhenFinished = () ->
+    if pending > 0
+      return setTimeout sendResponseWhenFinished, 500
+
+    res.status(201).json importStats
+    next()
+
+  busboy.on 'finish', sendResponseWhenFinished
+  req.pipe busboy
+
+getCollectionNames = (req, res, next) ->
+  if req.query?.collectionName?
+    req.collectionNames = [{ name: req.query.collectionName }]
+    next()
   else
-    if typeof req.body isnt 'object'
-      return next errors.createKinveyError 'DataImportError', 'When importing collection data, the request body must contain an object of the format { "collectionName1": [...entities...], ... }'
-
-    _insertDataIntoCollection = (collectionName, doneWithCollection) ->
-      unless Array.isArray req.body[collectionName]
-        return doneWithCollection errors.createKinveyError 'DataImportError', 'Collection data must be an array of entities'
-
-      dataStore.dropCollection collectionName, (err, result) ->
-        # an error will be returned if the collection doesn't exist. ignore it.
-        dataStore.createCollection collectionName, (err, collection) ->
-          if err then return next errors.createKinveyError 'DataImportError', err.toString()
-          collection.insert req.body[collectionName], (err, createdEntities) ->
-            if err then return next errors.createKinveyError 'DataImportError', err.toString()
-            importStats.push
-              collectionName: collectionName
-              numberImported: createdEntities.length
-            doneWithCollection()
-
-    importStats = []
-    collectionNames = Object.keys req.body
-
-    async.eachSeries collectionNames, _insertDataIntoCollection, (err) ->
-      if err then return next errors.createKinveyError 'DataImportError', err.toString()
-      res.status(201).json importStats
+    dataStore.collectionNames (err, collectionNames) ->
+      if err then return next errors.createKinveyError 'MongoError', err.toString()
+      req.collectionNames = collectionNames
       next()
 
-module.exports.installRoutes = (app) ->
-  app.get '/configuration', getConfiguration
-  app.put '/configuration', setConfiguration
+exportCollectionData = (req, res, next) ->
+  zip = new JSZip()
 
-  app.post '/configuration/collectionData/dropAllData', dropAllData
-  app.post '/configuration/collectionData/import/:collectionName?', importCollectionData
+  collectionIterator = (collection, doneWithCollection) ->
+    namespacedCollectionName = collection.name
+    collectionName = namespacedCollectionName.substring(namespacedCollectionName.indexOf('.') + 1)
+    dataStore.collection(collectionName).find({}).toArray (err, collectionData) ->
+      if err then return next errors.createKinveyError 'MongoError', err.toString()
+
+      try
+        zip.file "#{collectionName}.json", JSON.stringify collectionData
+      catch e
+        return next errors.createKinveyError 'MongoError', e.toString()
+
+      doneWithCollection()
+
+  async.each req.collectionNames, collectionIterator, (err) ->
+    if err then return next errors.createKinveyError 'MongoError', err.toString()
+
+    try
+      zippedBuffer = zip.generate { type: 'nodebuffer' }
+    catch e
+      return next errors.createKinveyError 'MongoError', e.toString()
+
+    if req.query?.collectionName?
+      filename = req.query.collectionName
+    else
+      filename = 'collectionData'
+    filename += '-' + (new Date().getTime()) + '.zip'
+    res.header 'Content-Disposition', 'attachment; filename=' + filename
+    res.status(200).send zippedBuffer
+
+module.exports.installRoutes = (app) ->
+  app.post '/configuration/collectionData/dropAllData',                     dropAllData
+  app.post '/configuration/collectionData/import',                          importCollectionData
+  app.get  '/configuration/collectionData/export',      getCollectionNames, exportCollectionData
