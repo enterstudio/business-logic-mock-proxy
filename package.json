@@ -23,27 +23,27 @@
     "test-push"             : "mocha test/lib/push.test.coffee"
   },
   "dependencies": {
-    "async": "1.4.x",
-    "body-parser": "1.13.x",
+    "async": "1.4.2",
+    "body-parser": "1.13.3",
     "bson": "0.2.15",
-    "busboy": "0.2.x",
+    "busboy": "0.2.11",
     "business-logic-local-dashboard": "Kinvey/business-logic-local-dashboard.git#0.1.0",
-    "coffee-script": "1.10.x",
-    "config": "1.16.x",
-    "cors": "2.7.x",
-    "express": "4.13.x",
-    "JSONStream": "0.10.x",
-    "jszip": "2.5.x",
+    "coffee-script": "1.10.0",
+    "config": "1.16.0",
+    "cors": "2.7.1",
+    "express": "4.13.3",
+    "JSONStream": "0.10.0",
+    "jszip": "2.5.0",
     "tingodb": "0.3.4",
-    "underscore": "1.8.x",
-    "uuid": "2.0.x"
+    "underscore": "1.8.3",
+    "uuid": "2.0.1"
   },
   "devDependencies": {
-    "coffeelint" : "1.11.x",
-    "mocha"      : "2.3.x",
-    "node-zip"   : "1.1.x",
-    "request"    : "2.62.x",
-    "should"     : "7.1.x"
+    "coffeelint" : "1.11.1",
+    "mocha"      : "2.3.2",
+    "node-zip"   : "1.1.1",
+    "request"    : "2.62.0",
+    "should"     : "7.1.0"
   },
   "engines": { "node": "= 0.10.x" }
 }

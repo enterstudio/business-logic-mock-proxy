@@ -193,58 +193,58 @@ limitations under the License.
 
 Summary:
 
-* async-1.4        [MIT] - Asynchronuous flow handler.
-* body-parser-1.13 [MIT] - Request body parser.
-* bson-0.2.15      [Apache-2.0] - BSON handler.
-* busboy-0.2       [MIT] - Upload handler.
+* async-1.4.2          [MIT] - Asynchronuous flow handler.
+* body-parser-1.13.3   [MIT] - Request body parser.
+* bson-0.2.15          [Apache-2.0] - BSON handler.
+* busboy-0.2.11        [MIT] - Upload handler.
 * business-logic-local-dashboard-0.1.0 [Apache-2.0] - Web interface.
-* coffee-script-1.10 [MIT] - Project language.
-* coffeelint-1.11  [MIT] - Linting library.
-* config-1.16      [MIT] - Configuration management.
-* cors-2.7         [MIT] - Enables CORS for express.
-* express-4.13     [MIT] - Application framework.
-* JSONStream-0.10  [MIT] - JSON request body handler.
-* jszip-2.5        [MIT] - ZIP handler.
-* mocha-2.3        [MIT] - Testing framework.
-* node-zip-1.1     [MIT] - ZIP handler.
-* request-2.62     [Apache-2.0] - Request performer.
-* should-7.1       [MIT] - Assertion library.
-* tingodb-0.3.4    [MIT] - In-memory database.
-* underscore-1.8   [MIT] - Utility library.
-* uuid-2.0         [MIT] - ID generator.
+* coffee-script-1.10.0 [MIT] - Project language.
+* coffeelint-1.11.1    [MIT] - Linting library.
+* config-1.16.0        [MIT] - Configuration management.
+* cors-2.7.1           [MIT] - Enables CORS for express.
+* express-4.13.3       [MIT] - Application framework.
+* JSONStream-0.10.0    [MIT] - JSON request body handler.
+* jszip-2.5.0          [MIT] - ZIP handler.
+* mocha-2.3.2          [MIT] - Testing framework.
+* node-zip-1.1.1       [MIT] - ZIP handler.
+* request-2.62.0       [Apache-2.0] - Request performer.
+* should-7.1.0         [MIT] - Assertion library.
+* tingodb-0.3.4        [MIT] - In-memory database.
+* underscore-1.8.3     [MIT] - Utility library.
+* uuid-2.0.1           [MIT] - ID generator.
 
 
 SECTION 1: BSD-STYLE, MIT-STYLE, OR SIMILAR STYLE LICENSES
 
-   >>> async-1.4
-   >>> body-parser-1.13
-   >>> busboy-0.2
-   >>> coffee-script-1.10
-   >>> coffeelint-1.11
-   >>> config-1.16
-   >>> cors-2.7
-   >>> express-4.13
-   >>> JSONStream-0.10
-   >>> jszip-2.5
-   >>> mocha-2.3
-   >>> node-zip-1.1
-   >>> should-7.1
+   >>> async-1.4.2
+   >>> body-parser-1.13.3
+   >>> busboy-0.2.15
+   >>> coffee-script-1.10.0
+   >>> coffeelint-1.11.1
+   >>> config-1.16.0
+   >>> cors-2.7.1
+   >>> express-4.13.3
+   >>> JSONStream-0.10.0
+   >>> jszip-2.5.0
+   >>> mocha-2.3.2
+   >>> node-zip-1.1-1
+   >>> should-7.1.0
    >>> tingodb-0.3.4
-   >>> underscore-1.8
-   >>> uuid-2.0
+   >>> underscore-1.8.3
+   >>> uuid-2.0.1
 
 SECTION 2: Apache License, V2.0
 
    >>> bson-0.2.15
    >>> business-logic-local-dashboard-0.1.0
-   >>> request-2.62
+   >>> request-2.62.0
 
 
 --------------- SECTION 1:  BSD-STYLE, MIT-STYLE, OR SIMILAR STYLE LICENSES ----------
 
 BSD-STYLE, MIT-STYLE, OR SIMILAR STYLE is applicable to the following component(s).
 
->>> async-1.4 (https://github.com/caolan/async/blob/master/LICENSE)
+>>> async-1.4.2 (https://github.com/caolan/async/blob/master/LICENSE)
 
 Copyright (c) 2010-2014 Caolan McMahon
 
@@ -267,7 +267,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
->>> body-parser-1.13 (https://github.com/expressjs/body-parser/blob/master/LICENSE)
+>>> body-parser-1.13.3 (https://github.com/expressjs/body-parser/blob/master/LICENSE)
 
 (The MIT License)
 
@@ -294,7 +294,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
->>> busboy-0.2 (https://github.com/mscdex/busboy/blob/master/LICENSE)
+>>> busboy-0.2.11 (https://github.com/mscdex/busboy/blob/master/LICENSE)
 
 Copyright Brian White. All rights reserved.
 
@@ -317,7 +317,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
 
 
->>> coffee-script-1.10 (https://github.com/jashkenas/coffeescript/blob/master/LICENSE)
+>>> coffee-script-1.10.0 (https://github.com/jashkenas/coffeescript/blob/master/LICENSE)
 
 Copyright (c) 2009-2015 Jeremy Ashkenas
 
@@ -343,7 +343,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
 
->>> coffeelint-1.11 (https://github.com/clutchski/coffeelint/blob/master/LICENSE)
+>>> coffeelint-1.11.1 (https://github.com/clutchski/coffeelint/blob/master/LICENSE)
 
 CoffeeLint
 Copyright (c) 2011 Matthew Perpick
@@ -367,7 +367,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
->>> config-1.16 (https://github.com/lorenwest/node-config/blob/master/LICENSE)
+>>> config-1.16.0 (https://github.com/lorenwest/node-config/blob/master/LICENSE)
 
 // Copyright 2010-2015, Loren West and other contributors
 
@@ -390,7 +390,7 @@ THE SOFTWARE.
 // IN THE SOFTWARE.
 
 
->>> cors-2.7 (https://github.com/expressjs/cors/blob/master/LICENSE)
+>>> cors-2.7.1 (https://github.com/expressjs/cors/blob/master/LICENSE)
 
 The MIT License (MIT)
 
@@ -403,7 +403,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
->>> express-4.13 (https://github.com/strongloop/express/blob/master/LICENSE)
+>>> express-4.13.3 (https://github.com/strongloop/express/blob/master/LICENSE)
 
 (The MIT License)
 
@@ -431,7 +431,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
->>> JSONStream-0.10 (https://github.com/dominictarr/JSONStream/blob/master/LICENSE.MIT)
+>>> JSONStream-0.10.0 (https://github.com/dominictarr/JSONStream/blob/master/LICENSE.MIT)
 
 The MIT License
 
@@ -459,7 +459,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
->>> jszip-2.5 (https://github.com/Stuk/jszip/blob/master/LICENSE.markdown)
+>>> jszip-2.5.0 (https://github.com/Stuk/jszip/blob/master/LICENSE.markdown)
 
 The MIT License
 Copyright (c) 2009-2014 Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso
@@ -471,7 +471,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
->>> mocha-2.3 (https://github.com/mochajs/mocha/blob/master/LICENSE)
+>>> mocha-2.3.2 (https://github.com/mochajs/mocha/blob/master/LICENSE)
 
 (The MIT License)
 
@@ -497,12 +497,12 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
->>> node-zip-1.1 (https://github.com/daraosn/node-zip/blob/master/README.md)
+>>> node-zip-1.1.1 (https://github.com/daraosn/node-zip/blob/master/README.md)
 
 MIT
 
 
->>> should-7.1 (https://github.com/shouldjs/should.js/blob/master/LICENSE)
+>>> should-7.1.0 (https://github.com/shouldjs/should.js/blob/master/LICENSE)
 
 Copyright (c) 2010-2014 TJ Holowaychuk <tj@vision-media.ca>
 
@@ -536,7 +536,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
->>> underscore-1.8 (https://github.com/jashkenas/underscore/blob/master/LICENSE)
+>>> underscore-1.8.3 (https://github.com/jashkenas/underscore/blob/master/LICENSE)
 
 Copyright (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative
 Reporters & Editors
@@ -563,7 +563,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
 
->>> uuid (https://github.com/defunctzombie/node-uuid/blob/master/LICENSE.md)
+>>> uuid-2.0.1 (https://github.com/defunctzombie/node-uuid/blob/master/LICENSE.md)
 
 Copyright (c) 2010-2012 Robert Kieffer MIT License - http://opensource.org/licenses/mit-license.php
 
@@ -792,7 +792,7 @@ KINVEY, INC and is subject to applicable licensing agreements.
 Unauthorized reproduction, transmission or distribution of this file and its
 contents is a violation of applicable laws.
 
->>> request-2.62 (https://github.com/request/request/blob/master/LICENSE)
+>>> request-2.62.0 (https://github.com/request/request/blob/master/LICENSE)
 
 Apache License
 
