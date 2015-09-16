@@ -41,5 +41,4 @@ RUN \
 EXPOSE 2845
 WORKDIR /opt/kinvey/business-logic-mock-proxy
 RUN \
- npm uninstall business-logic-local-dashboard --save && \
  npm install

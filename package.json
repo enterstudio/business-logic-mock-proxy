@@ -1,43 +1,49 @@
 {
-  "name": "business-logic-mock-proxy",
-  "version": "0.0.2",
-  "description": "Business Logic Mock Proxy",
-  "engines": {
-    "node": "= 0.10.x"
+  "name"         : "business-logic-mock-proxy",
+  "version"      : "0.1.0",
+  "description"  : "Business Logic Mock Proxy",
+  "private"      : true,
+  "homepage"     : "http://www.kinvey.com",
+  "bugs"         : "https://github.com/Kinvey/business-logic-mock-proxy/issues",
+  "license"      : "Apache-2.0",
+  "author"       : "Kinvey, Inc.",
+  "contributors" : [
+    "Michael Salinger <mjsalinger@kinvey.com>",
+    "Mark van Seventer <mark@kinvey.com>"
+  ],
+  "repository" : { "type": "git", "url": "Kinvey/business-logic-mock-proxy" },
+  "scripts"    : {
+    "start"   : "node .",
+    "pretest" : "coffeelint -f .coffeelint config lib test",
+    "test"    : "mocha test/",
+    "test-collectionAccess" : "mocha test/lib/collection-access.test.coffee test/lib/collection-access-commands/*",
+    "test-configuration"    : "mocha test/lib/configuration-management.test.coffee",
+    "test-email"            : "mocha test/lib/email.test.coffee",
+    "test-logging"          : "mocha test/lib/logging.test.coffee",
+    "test-push"             : "mocha test/lib/push.test.coffee"
   },
   "dependencies": {
-    "business-logic-local-dashboard": "git+ssh://git@github.com:Kinvey/business-logic-local-dashboard.git#0.0.2",
-    "JSONStream": "^0.10.0",
-    "async": "0.9.0",
-    "body-parser": "1.6.5",
-    "bower": "^1.3.12",
+    "async": "1.4.x",
+    "body-parser": "1.13.x",
     "bson": "0.2.15",
-    "busboy": "^0.2.9",
-    "coffeelint": "^1.8.1",
-    "config": "1.0.2",
-    "cors": "^2.5.2",
-    "express": "4.8.5",
-    "jszip": "^2.4.0",
+    "busboy": "0.2.x",
+    "business-logic-local-dashboard": "Kinvey/business-logic-local-dashboard.git#0.1.0",
+    "coffee-script": "1.10.x",
+    "config": "1.16.x",
+    "cors": "2.7.x",
+    "express": "4.13.x",
+    "JSONStream": "0.10.x",
+    "jszip": "2.5.x",
     "tingodb": "0.3.4",
-    "underscore": "^1.7.0",
-    "uuid": "1.4.1"
+    "underscore": "1.8.x",
+    "uuid": "2.0.x"
   },
   "devDependencies": {
-    "async": "^0.9.0",
-    "coffee-script": "1.7.1",
-    "mocha": "1.21.4",
-    "node-zip": "^1.1.0",
-    "request": "^2.40.0",
-    "should": "3.3.2"
+    "coffeelint" : "1.11.x",
+    "mocha"      : "2.3.x",
+    "node-zip"   : "1.1.x",
+    "request"    : "2.62.x",
+    "should"     : "7.1.x"
   },
-  "scripts": {
-    "start": "node .",
-    "pretest": "coffeelint -f .coffeelint config lib test",
-    "test": "mocha test/",
-    "test-logging": "mocha test/lib/logging.test.coffee",
-    "test-collectionAccess": "mocha test/lib/collection-access.test.coffee test/lib/collection-access-commands/*",
-    "test-email": "mocha test/lib/email.test.coffee",
-    "test-push": "mocha test/lib/push.test.coffee",
-    "test-configuration": "mocha test/lib/configuration-management.test.coffee"
-  }
+  "engines": { "node": "= 0.10.x" }
 }
