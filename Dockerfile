@@ -25,6 +25,7 @@ RUN \
  groupadd -g 2010 kinvey && \
  useradd -m -s /usr/sbin/nologin -d /opt/kinvey -g kinvey -u 2010 -c "Kinvey Application User" kinvey && \
  apt-get update && apt-get -y dist-upgrade && \
+ apt-get -y install git && \
  mkdir -m 0755 /var/log/kinvey && \
  mkdir -m 0755 /etc/service/business-logic-mock-proxy && \
  chown -R kinvey:kinvey /var/log/kinvey && \
