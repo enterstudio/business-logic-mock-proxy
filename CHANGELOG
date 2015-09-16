@@ -1,6 +1,7 @@
 ## Changelog
 
 ### 0.1.0
+* Add Dockerfile
 * Add license information
 * Mark project as public
 * Updated dependencies
