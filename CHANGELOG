@@ -1,5 +1,11 @@
 ## Changelog
 
+### 0.1.0
+* Add Dockerfile
+* Add license information
+* Mark project as public
+* Updated dependencies
+
 ### 0.0.2
 * Add HTTP dashboard, installed through github and accessible through /interface
 * Add helper REST routes for services (email, push, logging) to support HTTP dashboard

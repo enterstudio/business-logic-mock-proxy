@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Copyright 2015 Kinvey, Inc.
 #
@@ -13,17 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-pkg = require '../package.json'
-
-module.exports =
-  outputCollections:
-    email: '_outgoingEmailMessages'
-    push: '_outgoingPushMessages'
-    logging: '_blLogs'
-
-  server:
-    port: 2845
-    address: "localhost"
-
-  version: pkg.version
+# `/sbin/setuser kinvey` runs the given command as the user `kinvey`.
+# If you omit that part, the command will be run as root.
+cd /opt/kinvey/business-logic-mock-proxy
+exec /sbin/setuser kinvey /usr/bin/node /opt/kinvey/business-logic-mock-proxy >> /var/log/blmockproxy.log 2>&1
