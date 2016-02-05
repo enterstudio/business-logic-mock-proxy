@@ -45,7 +45,7 @@ npm run-script test-specificTestName
 Where `specificTestName` is one of `logging`, `collectionAccess`, `email`, `push`
 
 ## License
-    Copyright 2015 Kinvey, Inc.
+    Copyright 2016 Kinvey, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
