@@ -1,49 +1,54 @@
 {
-  "name"         : "business-logic-mock-proxy",
-  "version"      : "0.1.0",
-  "description"  : "Business Logic Mock Proxy",
-  "private"      : true,
-  "homepage"     : "http://www.kinvey.com",
-  "bugs"         : "https://github.com/Kinvey/business-logic-mock-proxy/issues",
-  "license"      : "Apache-2.0",
-  "author"       : "Kinvey, Inc.",
-  "contributors" : [
+  "name": "business-logic-mock-proxy",
+  "version": "0.1.0",
+  "description": "Business Logic Mock Proxy",
+  "private": true,
+  "homepage": "http://www.kinvey.com",
+  "bugs": "https://github.com/Kinvey/business-logic-mock-proxy/issues",
+  "license": "Apache-2.0",
+  "author": "Kinvey, Inc.",
+  "contributors": [
     "Michael Salinger <mjsalinger@kinvey.com>",
     "Mark van Seventer <mark@kinvey.com>"
   ],
-  "repository" : { "type": "git", "url": "Kinvey/business-logic-mock-proxy" },
-  "scripts"    : {
-    "start"   : "node .",
-    "pretest" : "coffeelint -f .coffeelint config lib test",
-    "test"    : "mocha test/",
-    "test-collectionAccess" : "mocha test/lib/collection-access.test.coffee test/lib/collection-access-commands/*",
-    "test-configuration"    : "mocha test/lib/configuration-management.test.coffee",
-    "test-email"            : "mocha test/lib/email.test.coffee",
-    "test-logging"          : "mocha test/lib/logging.test.coffee",
-    "test-push"             : "mocha test/lib/push.test.coffee"
+  "repository": {
+    "type": "git",
+    "url": "Kinvey/business-logic-mock-proxy"
+  },
+  "scripts": {
+    "start": "node .",
+    "pretest": "coffeelint -f .coffeelint config lib test",
+    "test": "mocha test/",
+    "test-collectionAccess": "mocha test/lib/collection-access.test.coffee test/lib/collection-access-commands/*",
+    "test-configuration": "mocha test/lib/configuration-management.test.coffee",
+    "test-email": "mocha test/lib/email.test.coffee",
+    "test-logging": "mocha test/lib/logging.test.coffee",
+    "test-push": "mocha test/lib/push.test.coffee"
   },
   "dependencies": {
     "async": "1.4.2",
-    "body-parser": "1.13.3",
-    "bson": "0.2.15",
+    "body-parser": "1.18.2",
+    "bson": "1.0.5",
     "busboy": "0.2.11",
     "business-logic-local-dashboard": "Kinvey/business-logic-local-dashboard.git#0.1.0",
     "coffee-script": "1.10.0",
     "config": "1.16.0",
     "cors": "2.7.1",
-    "express": "4.13.3",
+    "express": "4.16.0",
     "JSONStream": "0.10.0",
     "jszip": "2.5.0",
-    "tingodb": "0.3.4",
+    "tingodb": "0.6.1",
     "underscore": "1.8.3",
     "uuid": "2.0.1"
   },
   "devDependencies": {
-    "coffeelint" : "1.11.1",
-    "mocha"      : "2.3.2",
-    "node-zip"   : "1.1.1",
-    "request"    : "2.62.0",
-    "should"     : "7.1.0"
+    "coffeelint": "1.11.1",
+    "mocha": "2.3.2",
+    "node-zip": "1.1.1",
+    "request": "2.62.0",
+    "should": "7.1.0"
   },
-  "engines": { "node": "= 0.10.x" }
+  "engines": {
+    "node": "= 0.10.x"
+  }
 }
