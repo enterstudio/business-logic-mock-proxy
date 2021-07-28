@@ -33,7 +33,7 @@
     "cors": "2.7.1",
     "express": "4.13.3",
     "JSONStream": "0.10.0",
-    "jszip": "2.5.0",
+    "jszip": "3.7.0",
     "tingodb": "0.3.4",
     "underscore": "1.8.3",
     "uuid": "2.0.1"
